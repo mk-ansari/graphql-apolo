@@ -1,0 +1,60 @@
+=========Get All Users========
+
+query getAllUsers{
+   users{
+    _id
+    firstName
+    lastName
+    email
+    password
+  }
+}
+
+=========Get All Quotes========
+query getAllQuotes{
+   quotes{
+  	name
+    by
+  }
+}
+
+=========Get Single User By ID========
+query getUserById {
+  user(_id:"1"){
+    _id
+    firstName
+    email
+  }
+}
+
+=========Get Quotes By User========
+query getQuotesByUser {
+  quote(by:"1"){
+    by
+    name
+  }
+}
+
+=========Pass Dynamic ID using query variable========
+query getQuotesByUser($userId:ID!) {
+  quote(by:$userId){
+    by
+    name
+  }
+}
+
+=========Mutation SignUp User========
+mutation createUser($userNew:UserInput!){
+  user:signUp(userNew:$userNew){
+    _id
+    firstName
+    lastName
+    email
+    password
+  }
+}
+
+=========Create Quote========
+mutation createQuote{
+  quote:createQuote(name:"i am another nice quote")
+}
