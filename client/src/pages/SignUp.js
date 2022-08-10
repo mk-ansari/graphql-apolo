@@ -1,10 +1,17 @@
 import { useMutation } from "@apollo/client";
-import { CREATE_USER } from "../gqlOperations/mutations";
+import { SIGNUP_USER } from "../gqlOperations/mutations";
 import { useState } from "react";
 
+const formInitialValue = {
+  firstName:"",
+  lastName:"",
+  email:"",
+  password:"",
+}
+
 const SignUp = () => {
-  const [formData, setFormData] = useState({});
-  const [signUp, { data, error }] = useMutation(CREATE_USER);
+  const [formData, setFormData] = useState(formInitialValue);
+  const [signUp, { data, error }] = useMutation(SIGNUP_USER);
 
   const handleChange = (e) => {
     setFormData({
@@ -19,26 +26,27 @@ const SignUp = () => {
         userNew: formData,
       },
     });
+    setFormData(formInitialValue)
   };
 
   return (
     <>
       <div className="container">
         <div className="d-flex justify-content-center mt-5">
-          {error && <div className="red card-panel">{error.message}</div>}
-
+          <form className="col-6" onSubmit={handleSubmit}>
+          {error && <div className="text-danger">{error.message}</div>}
+            <h1 className="text-center">Sign Up</h1>
           {data && data.user && (
-            <div className="green card-panel">
+            <div className="text-success">
               {data.user.firstName} is SignedUp. You can login now!
             </div>
           )}
-          <form className="col-6" onSubmit={handleSubmit}>
-            <h1 className="text-center">Sign Up</h1>
             <div className="mb-3">
               <label className="form-label">First Name</label>
               <input
                 type="text"
-                name="fname"
+                name="firstName"
+                value={formData.firstName}
                 onChange={handleChange}
                 className="form-control"
               />
@@ -47,7 +55,8 @@ const SignUp = () => {
               <label className="form-label">Last Name</label>
               <input
                 type="text"
-                name="lname"
+                name="lastName"
+                value={formData.lastName}
                 onChange={handleChange}
                 className="form-control"
               />
@@ -57,6 +66,7 @@ const SignUp = () => {
               <input
                 type="email"
                 name="email"
+                value={formData.email}
                 onChange={handleChange}
                 className="form-control"
               />
@@ -66,6 +76,7 @@ const SignUp = () => {
               <input
                 type="password"
                 name="password"
+                value={formData.password}
                 onChange={handleChange}
                 className="form-control"
                 id="exampleInputPassword1"

@@ -1,17 +1,14 @@
 import Nav from "./components/Nav";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SignUp from "./pages/SignUp";
-import Users from "./pages/Users";
+import { routes } from "./routes";
+import { useRoutes } from "react-router-dom";
 
 function App() {
+  const element = useRoutes(routes);
   return (
-    <BrowserRouter>
+    <>
       <Nav />
-      <Routes>
-        <Route path="/" element={<Users/>}></Route>
-        <Route path="/signup" element={<SignUp/>}></Route>
-      </Routes>
-    </BrowserRouter>
+      {element}
+    </>
   );
 }
 

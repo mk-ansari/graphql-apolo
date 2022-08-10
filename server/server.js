@@ -1,21 +1,21 @@
-import { ApolloServer } from "apollo-server";
-import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-import typeDefs from "./schemaGql.js"
-
+import {ApolloServer} from 'apollo-server'
+import {ApolloServerPluginLandingPageGraphQLPlayground} from 'apollo-server-core'
+import typeDefs from './schemaGql.js'
+import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose'
-import { MONGODB_URI } from "./config.js";
+import { MONGODB_URI,JWT_SECRET } from "./config.js";
 
 mongoose.connect(MONGODB_URI,{
-  useNewUrlParser:true,
-  useUnifiedTopology:true
+    useNewUrlParser:true,
+    useUnifiedTopology:true
 })
 
 mongoose.connection.on("connected",()=>{
-  console.log("connected to mongodb")
+    console.log("connected to mongodb")
 })
 
 mongoose.connection.on("error",(err)=>{
-  console.log("error connecting",err)
+    console.log("error connecting",err)
 })
 
 
@@ -25,11 +25,21 @@ import './models/User.js'
 
 import resolvers from './resolvers.js'
 
+const context = ({req})=>{
+    const { authorization } = req.headers;
+    if(authorization){
+     const {userId} = jwt.verify(authorization,JWT_SECRET)
+     return {userId}
+    }
+}
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  plugins:[ApolloServerPluginLandingPageGraphQLPlayground]
+const server = new ApolloServer({ 
+    typeDefs, 
+    resolvers,
+    context,
+    plugins:[
+        ApolloServerPluginLandingPageGraphQLPlayground()
+    ]
 });
 
 server.listen().then(({ url }) => {

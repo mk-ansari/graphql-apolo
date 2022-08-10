@@ -1,60 +1,106 @@
-=========Get All Users========
-
+---------------------------
 query getAllUsers{
-   users{
+  users{
     _id
     firstName
     lastName
     email
-    password
   }
 }
-
-=========Get All Quotes========
+---------------------------
+query getUserById{
+  user(_id:"23131"){
+    _id
+    firstName
+    lastName
+    email
+  }
+}
+----------------------
+query getUserById($userid:ID!){
+  user(_id:$userid){
+    _id
+    firstName
+    lastName
+    email
+  }
+}
+-----------------------------
 query getAllQuotes{
-   quotes{
-  	name
-    by
-  }
-}
-
-=========Get Single User By ID========
-query getUserById {
-  user(_id:"1"){
-    _id
-    firstName
-    email
-  }
-}
-
-=========Get Quotes By User========
-query getQuotesByUser {
-  quote(by:"1"){
-    by
+  quotes{
     name
+    by  
   }
 }
-
-=========Pass Dynamic ID using query variable========
-query getQuotesByUser($userId:ID!) {
-  quote(by:$userId){
-    by
+-----------------------------
+query getQuotebyUser{
+  iquote(by:"4232"){
     name
+    by
   }
 }
-
-=========Mutation SignUp User========
+-----------------
+query getQuoteByUser($quoteby:ID!){
+  iquote(by:$quoteby){
+    name
+    by
+  }
+}
+-------
 mutation createUser($userNew:UserInput!){
-  user:signUp(userNew:$userNew){
+  user:signupUserDummy(userNew:$userNew){ 
     _id
+    email
     firstName
     lastName
-    email
-    password
   }
 }
 
-=========Create Quote========
+{
+  "userNew": {
+    "firstName": "navin",
+    "lastName": "ssd",
+    "email": "sdsad@sd.com",
+    "password": "12345"
+  }
+}
+------------
+mutation createUser($userNew:UserInput!){
+  user:signupUser(userNew:$userNew){ 
+    _id
+    email
+    firstName
+    lastName
+  }
+}
+
+{
+  "userNew": {
+    "firstName": "navin",
+    "lastName": "sharma",
+    "email": "navin@navin.com",
+    "password": "12345"
+  }
+}
+
+--------
+mutation SigninUser($userSignin:UserSigninInput!){
+  user:signinUser(userSignin:$userSignin){ 
+    token
+  }
+}
+
+{
+  "userSignin": {
+    "email": "ak@gmail.com",
+    "password": "12345"
+  }
+}
+------
+
+
 mutation createQuote{
   quote:createQuote(name:"i am another nice quote")
 }
+
+--------
