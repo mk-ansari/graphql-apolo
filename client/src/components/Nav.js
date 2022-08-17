@@ -1,12 +1,14 @@
 import React from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useApolloClient } from "@apollo/client";
-
 
 const Nav = () => {
-  const client = useApolloClient();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+
+  const handleLogout=()=>{
+      localStorage.removeItem("token");
+      navigate("/login");
+  }
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -32,39 +34,50 @@ const Nav = () => {
                 Home
               </NavLink>
             </li>
-              {
-                token ? 
-                  <>
-                    <li className="nav-item">
-                      <NavLink className="nav-link" aria-current="page" to="/profile">
-                        Profile
-                      </NavLink>
-                    </li>
-                    <li className="nav-item">
-                      <NavLink className="nav-link" aria-current="page" to="/create">
-                        Create
-                      </NavLink>
-                    </li>
-                    <li className="nav-item">
-                      <button className="btn btn-danger" aria-current="page" onClick={()=>{localStorage.removeItem("token"); navigate('/login'); }}>
-                        Logout
-                      </button>
-                    </li>
-                  </>
-                :
-                <>
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/signup">
-                      Signup
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/login">
-                      Login
-                    </NavLink>
-                  </li>
-                </>
-              }
+            {token ? (
+              <>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    aria-current="page"
+                    to="/profile"
+                  >
+                    Profile
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    aria-current="page"
+                    to="/create"
+                  >
+                    Create
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <button
+                    className="btn btn-danger"
+                    aria-current="page"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/signup">
+                    Signup
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/login">
+                    Login
+                  </NavLink>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

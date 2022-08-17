@@ -7,8 +7,8 @@ const Profile = () => {
   const { loading, error, data } = useQuery(GET_MY_PROFILE);
   const navigate = useNavigate();
 
-  if(!localStorage.getItem("token")) {
-    navigate("/login")
+  if (!localStorage.getItem("token")) {
+    navigate("/login");
   }
   if (loading) {
     return <h1 className="text-center">Loading...</h1>;

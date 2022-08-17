@@ -2,22 +2,11 @@ import {ApolloServer} from 'apollo-server'
 import {ApolloServerPluginLandingPageGraphQLPlayground} from 'apollo-server-core'
 import typeDefs from './schemaGql.js'
 import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose'
-import { MONGODB_URI,JWT_SECRET } from "./config.js";
 
-mongoose.connect(MONGODB_URI,{
-    useNewUrlParser:true,
-    useUnifiedTopology:true
-})
+import { JWT_SECRET, DB_CONFIG } from "./config.js";
 
-mongoose.connection.on("connected",()=>{
-    console.log("connected to mongodb")
-})
-
-mongoose.connection.on("error",(err)=>{
-    console.log("error connecting",err)
-})
-
+// connect database
+DB_CONFIG();
 
 //import models here
 import './models/Quotes.js'
@@ -27,6 +16,7 @@ import resolvers from './resolvers.js'
 
 const context = ({req})=>{
     const { authorization } = req.headers;
+    // console.log("token ",req.headers);
     if(authorization){
      const {userId} = jwt.verify(authorization,JWT_SECRET)
      return {userId}

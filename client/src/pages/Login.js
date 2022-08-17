@@ -6,12 +6,15 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
-  const [signIn, { loading, error }] = useMutation(SIGNIN_USER, {
-    onCompleted(data) {
-      localStorage.setItem("token", data.user.token);
-      navigate("/");
+  const [signIn, { loading, error }] = useMutation(
+    SIGNIN_USER,
+    {
+      onCompleted(data) {
+        localStorage.setItem("token", data.user.token);
+        navigate("/")
+      },
     },
-  });
+  );
 
   if (loading) {
     return <h1 className="text-center">Loading...</h1>;
@@ -23,7 +26,7 @@ const Login = () => {
       [e.target.name]: e.target.value,
     });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     signIn({
       variables: {
